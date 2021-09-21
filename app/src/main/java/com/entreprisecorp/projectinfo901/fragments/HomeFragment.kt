@@ -2,8 +2,10 @@ package com.entreprisecorp.projectinfo901.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.entreprisecorp.middlewareinfo901.Distribleware
 import com.entreprisecorp.projectinfo901.R
@@ -27,6 +29,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var listMessage = listOf<Message>()
 
+    //récupérer les arguments
+    private val args : HomeFragmentArgs by navArgs()
+
     fun refreshScreen() {
         val itemList = listMessage.map {
             MessageItem(it.name,it.message)
@@ -42,6 +47,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding?.recyclerView?.layoutManager = LinearLayoutManager(activity)
         refreshScreen()
 
+        (activity as AppCompatActivity).supportActionBar?.title = args.userName
+
         viewModel.liveDataMessage.observe(viewLifecycleOwner){
             listMessage = it
             refreshScreen()
@@ -49,7 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding?.sendMessageButton?.setOnClickListener {
             val textMessage = binding?.messageEditText?.text.toString()
-            viewModel.addMessage(Message("Tommy", textMessage))
+            viewModel.addMessage(Message(args.userName, textMessage))
         }
     }
 }
