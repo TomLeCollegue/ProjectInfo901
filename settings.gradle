@@ -5,3 +5,4 @@ plugins {
 
 rootProject.name = "ProjectInfo901"
 include ':app'
+include ':middlewareinfo901'

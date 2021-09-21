@@ -63,6 +63,7 @@ dependencies {
     implementation "com.mikepenz:fastadapter:_"
     implementation "com.mikepenz:fastadapter-extensions-binding:_"
     implementation "com.mikepenz:fastadapter-extensions-utils:_"
+    implementation(project(":middlewareinfo901"))
 
     // Testing
     testImplementation "junit:junit:_"
