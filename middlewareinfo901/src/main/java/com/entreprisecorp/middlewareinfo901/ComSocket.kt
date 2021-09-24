@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class ComSocket : Com {
 
     override var clock: Int = 0
+    override var id: Int = 0
 
     val socket: Socket by lazy {
         IO.socket("http://192.168.86.171:3000")
@@ -41,6 +42,8 @@ class ComSocket : Com {
     override fun synchronize() {
         TODO("Not yet implemented")
     }
+
+
 
 
 }

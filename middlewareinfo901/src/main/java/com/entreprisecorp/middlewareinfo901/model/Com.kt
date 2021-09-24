@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface Com {
 
     var clock: Int
+    var id: Int
 
     fun sendTo(message: Message)
     fun broadcast(message: Message)

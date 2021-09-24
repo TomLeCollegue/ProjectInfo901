@@ -12,6 +12,7 @@ import com.entreprisecorp.projectinfo901.MainActivity
 import com.entreprisecorp.projectinfo901.R
 import com.entreprisecorp.projectinfo901.databinding.FragmentHomeBinding
 import com.entreprisecorp.projectinfo901.fastitem.MessageItem
+import com.entreprisecorp.projectinfo901.fastitem.MessageSendItem
 import com.entreprisecorp.projectinfo901.viewmodels.HomeFragmentViewModel
 import com.entreprisecorp.projectinfo901.viewmodels.HomeFragmentViewModelFactory
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
@@ -31,9 +32,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     //récupérer les arguments
     private val args: HomeFragmentArgs by navArgs()
 
-    fun refreshScreen() {
+    private fun refreshScreen() {
         val itemList = listMessage.map {
-            MessageItem(it.sender, it.text)
+            if(it.sender == (activity as MainActivity).username)
+                MessageSendItem(it.receiver, it.text)
+            else 
+                MessageItem(it.sender, it.text)
         }
 
         adapter.setNewList(itemList)

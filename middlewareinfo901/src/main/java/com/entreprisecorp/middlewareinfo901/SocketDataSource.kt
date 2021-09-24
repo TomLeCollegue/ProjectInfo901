@@ -48,7 +48,7 @@ class SocketDataSource(val com: ComSocket) {
     fun onReceive(userName: String): Flow<Message> {
         return callbackFlow {
             com.socket.on(Event.ON_RECEIVE.event) {
-                if (it[2] == userName) {
+                if (it[2] == userName || it[3] == userName) {
                     val message = Message(
                         text = it[0].toString(),
                         clock = it[1] as Int,
