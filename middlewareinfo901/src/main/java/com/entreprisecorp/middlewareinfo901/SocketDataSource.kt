@@ -53,7 +53,8 @@ class SocketDataSource(val com: ComSocket) {
                         text = it[0].toString(),
                         clock = it[1] as Int,
                         receiver = it[2].toString(),
-                        sender = it[3].toString() + " (privée)"
+                        sender = it[3].toString(),
+                        isPrivate = true
                     )
                     this@callbackFlow.trySend(message)
                 }

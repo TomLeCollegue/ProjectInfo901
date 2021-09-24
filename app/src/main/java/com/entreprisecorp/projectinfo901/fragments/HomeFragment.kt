@@ -15,6 +15,7 @@ import com.entreprisecorp.projectinfo901.fastitem.MessageItem
 import com.entreprisecorp.projectinfo901.fastitem.MessageSendItem
 import com.entreprisecorp.projectinfo901.viewmodels.HomeFragmentViewModel
 import com.entreprisecorp.projectinfo901.viewmodels.HomeFragmentViewModelFactory
+import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericFastItemAdapter
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -33,11 +34,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val args: HomeFragmentArgs by navArgs()
 
     private fun refreshScreen() {
-        val itemList = listMessage.map {
-            if(it.sender == (activity as MainActivity).username)
-                MessageSendItem(it.receiver, it.text)
-            else
-                MessageItem(it.sender, it.text)
+        val itemList = arrayListOf<GenericItem>()
+        listMessage.forEach {
+            if(it.sender == args.userName) {
+                itemList += MessageSendItem(it.receiver ?: "tout le monde", it.text, it.isPrivate)
+            }
+            else {
+                itemList += MessageItem(it.sender, it.text, it.isPrivate)
+            }
         }
 
         adapter.setNewList(itemList)

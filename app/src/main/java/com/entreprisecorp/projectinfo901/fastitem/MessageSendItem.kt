@@ -2,12 +2,15 @@ package com.entreprisecorp.projectinfo901.fastitem
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.entreprisecorp.projectinfo901.R
 import com.entreprisecorp.projectinfo901.databinding.MessageSendItemLayoutBinding
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 
 class MessageSendItem(
-    var nameReceiver: String? = null,
-    var message: String? = null
+    val nameReceiver: String? = null,
+    val message: String? = null,
+    val isPrivate: Boolean = false
+
 ) : AbstractBindingItem<MessageSendItemLayoutBinding>() {
 
     override fun createBinding(
@@ -17,13 +20,19 @@ class MessageSendItem(
         return MessageSendItemLayoutBinding.inflate(inflater, parent, false)
     }
 
-    override val type: Int = 123
+    override val type: Int = R.id.message_send_item
 
     override fun bindView(binding: MessageSendItemLayoutBinding, payloads: List<Any>) {
         super.bindView(binding, payloads)
         binding.apply {
-            nameSenderTextView.text = "to $nameReceiver"
             messageTextView.text = message
+            if(isPrivate){
+                card.setCardBackgroundColor(root.context.getColor(android.R.color.darker_gray))
+                nameSenderTextView.text = "À $nameReceiver (privé)"
+            }
+            else {
+                nameSenderTextView.text = "À $nameReceiver"
+            }
         }
     }
 
@@ -34,6 +43,5 @@ class MessageSendItem(
             messageTextView.text = null
         }
     }
-
 
 }

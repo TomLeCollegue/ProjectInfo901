@@ -4,5 +4,6 @@ data class Message(
     val text: String,
     val clock: Int,
     val receiver: String? = null,
-    val sender: String? = null
+    val sender: String? = null,
+    val isPrivate: Boolean = false
 )

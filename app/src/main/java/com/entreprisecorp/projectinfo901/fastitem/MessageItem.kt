@@ -1,13 +1,16 @@
 package com.entreprisecorp.projectinfo901.fastitem
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.entreprisecorp.projectinfo901.R
 import com.entreprisecorp.projectinfo901.databinding.MessageItemLayoutBinding
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 
 class MessageItem(
-    var nameSender: String? = null,
-    var message: String? = null
+    val nameSender: String? = null,
+    val message: String? = null,
+    val isPrivate: Boolean = false
 ) : AbstractBindingItem<MessageItemLayoutBinding>() {
 
     override fun createBinding(
@@ -17,13 +20,19 @@ class MessageItem(
         return MessageItemLayoutBinding.inflate(inflater, parent, false)
     }
 
-    override val type: Int = 123
+    override val type: Int = R.id.message_item
 
     override fun bindView(binding: MessageItemLayoutBinding, payloads: List<Any>) {
         super.bindView(binding, payloads)
         binding.apply {
-            nameSenderTextView.text = nameSender
             messageTextView.text = message
+            if(isPrivate){
+                card.setCardBackgroundColor(root.context.getColor(android.R.color.holo_orange_light))
+                nameSenderTextView.text = "$nameSender (privé)"
+            }
+            else {
+                nameSenderTextView.text = nameSender
+            }
         }
     }
 
