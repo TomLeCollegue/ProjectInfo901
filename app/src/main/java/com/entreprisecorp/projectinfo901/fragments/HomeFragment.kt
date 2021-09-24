@@ -36,7 +36,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val itemList = listMessage.map {
             if(it.sender == (activity as MainActivity).username)
                 MessageSendItem(it.receiver, it.text)
-            else 
+            else
                 MessageItem(it.sender, it.text)
         }
 

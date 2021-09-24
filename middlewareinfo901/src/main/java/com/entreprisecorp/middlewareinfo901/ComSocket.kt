@@ -12,7 +12,7 @@ class ComSocket : Com {
     override var id: Int = 0
 
     val socket: Socket by lazy {
-        IO.socket("http://192.168.86.171:3000")
+        IO.socket("http://10.7.40.121:3000")
     }
 
     init {
