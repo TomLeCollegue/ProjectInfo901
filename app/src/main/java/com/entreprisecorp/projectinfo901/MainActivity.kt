@@ -7,6 +7,8 @@ import com.entreprisecorp.middlewareinfo901.model.Com
 
 class MainActivity : AppCompatActivity() {
 
+    var username : String? = null
+
     lateinit var middleware: Com
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 class ComSocket : Com {
 
-    private val clock: Int = 0
+    override var clock: Int = 0
 
-    private val socket: Socket by lazy {
+    val socket: Socket by lazy {
         IO.socket("http://192.168.86.171:3000")
     }
 
@@ -20,19 +20,15 @@ class ComSocket : Com {
 
     private val dataSource: SocketDataSource by lazy {
         SocketDataSource(
-            socket = socket,
-            clock = clock
+            this
         )
     }
 
-    override fun sendTo(message: Message) {
-    }
+    override fun sendTo(message: Message) = dataSource.sendTo(message)
 
     override fun broadcast(message: Message) = dataSource.broadcast(message)
 
-    override fun onReceive(): Flow<Message> {
-        TODO("Not yet implemented")
-    }
+    override fun onReceive(userName:String): Flow<Message> = dataSource.onReceive(userName)
 
     override fun onBroadcast(): Flow<Message> = dataSource.onBroadcast()
 

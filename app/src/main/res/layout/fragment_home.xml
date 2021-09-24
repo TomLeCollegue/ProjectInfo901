@@ -20,16 +20,37 @@
         android:layout_height="wrap_content"
         android:hint="message"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
+        app:layout_constraintEnd_toStartOf="@+id/broadcastButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/usernameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="username"
+        app:layout_constraintBottom_toTopOf="@+id/messageEditText"
+        app:layout_constraintEnd_toStartOf="@+id/broadcastButton"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/sendMessageButton"
+        android:id="@+id/broadcastButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_send"
         android:drawableTint="@color/white"
-        android:text="Envoyer"
+        android:text="Broadcast"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/sendPrivateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawableEnd="@drawable/ic_send"
+        android:drawableTint="@color/white"
+        android:text="MP"
+        app:layout_constraintBottom_toTopOf="@+id/broadcastButton"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

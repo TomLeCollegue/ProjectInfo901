@@ -5,26 +5,33 @@ import com.entreprisecorp.middlewareinfo901.model.Com
 import com.entreprisecorp.middlewareinfo901.model.Message
 import com.entreprisecorp.projectinfo901.model.MessageUi
 
-class HomeFragmentViewModel(val middleware: Com) : ViewModel() {
+class HomeFragmentViewModel(val middleware: Com, userName: String) : ViewModel() {
 
-    val liveDataMessage = MutableLiveData<List<MessageUi>>()
-    val broadcastedMessage: LiveData<Message> = middleware.onBroadcast().asLiveData(timeoutInMs = 0L)
+    val broadcastedMessage: LiveData<Message> =
+        middleware.onBroadcast().asLiveData(timeoutInMs = 0L)
 
-    fun addMessage(messageUi: MessageUi) {
-        val listMessage = liveDataMessage.value?.toMutableList() ?: mutableListOf()
+    val reveivedMessage: LiveData<Message> =
+        middleware.onReceive(userName).asLiveData(timeoutInMs = 0L)
 
-        listMessage.add(messageUi)
-        liveDataMessage.postValue(listMessage)
+    fun broadcastMessage(message: Message) {
+        middleware.broadcast(message)
     }
 
-    fun sendMessage(message: Message){
-        middleware.broadcast(message)
+    fun sendMessage(message: Message) {
+        middleware.sendTo(message)
     }
 
 }
 
-class HomeFragmentViewModelFactory(private val middleware: Com) : ViewModelProvider.Factory {
+class HomeFragmentViewModelFactory(
+    private val middleware: Com,
+    private val userName: String
+) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return HomeFragmentViewModel(middleware = middleware) as T
+        return HomeFragmentViewModel(
+            middleware = middleware,
+            userName = userName
+        ) as T
     }
 }
