@@ -1,11 +1,13 @@
 package com.entreprisecorp.middlewareinfo901.model
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 interface Com {
 
     var clock: Int
     var id: Int
+    val userCount: Int
 
     fun sendTo(message: Message)
     fun broadcast(message: Message)
@@ -17,4 +19,6 @@ interface Com {
     fun releaseSC()
 
     fun synchronize()
+
+    fun manageReceiveToken()
 }

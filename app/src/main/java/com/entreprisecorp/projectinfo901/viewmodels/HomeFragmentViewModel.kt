@@ -1,6 +1,7 @@
 package com.entreprisecorp.projectinfo901.viewmodels
 
 import androidx.lifecycle.*
+import com.entreprisecorp.middlewareinfo901.ComSocket
 import com.entreprisecorp.middlewareinfo901.model.Com
 import com.entreprisecorp.middlewareinfo901.model.Message
 import com.entreprisecorp.projectinfo901.model.MessageUi
@@ -13,13 +14,15 @@ class HomeFragmentViewModel(val middleware: Com, userName: String) : ViewModel()
     val reveivedMessage: LiveData<Message> =
         middleware.onReceive(userName).asLiveData(timeoutInMs = 0L)
 
-    fun broadcastMessage(message: Message) {
-        middleware.broadcast(message)
-    }
+    val isRequestingSC = (middleware as ComSocket).isRequestingSC
 
-    fun sendMessage(message: Message) {
-        middleware.sendTo(message)
-    }
+    val token = (middleware as ComSocket).token
+
+    fun broadcastMessage(message: Message) = middleware.broadcast(message)
+    fun sendMessage(message: Message) = middleware.sendTo(message)
+
+    fun releaseSC() = middleware.releaseSC()
+    fun requestSC() = middleware.requestSC()
 
 }
 

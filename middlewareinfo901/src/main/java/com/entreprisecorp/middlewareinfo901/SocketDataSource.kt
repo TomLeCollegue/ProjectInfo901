@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.callbackFlow
 enum class Event(val event: String) {
     ON_BROADCAST("onBroadcast"),
     ON_RECEIVE("onReceive"),
-
+    ON_RECEIVE_TOKEN("onReceiveToken"),
+    ON_RECEIVE_ID("onReceiveId"),
+    ON_NEW_PERSON_CONNECTED("onNewPersonConnected")
 }
 
 class SocketDataSource(val com: ComSocket) {
@@ -58,6 +60,43 @@ class SocketDataSource(val com: ComSocket) {
                     )
                     this@callbackFlow.trySend(message)
                 }
+            }
+            awaitClose()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun onReceiveToken(id: Int): Flow<String> {
+        return callbackFlow {
+            com.socket.on(Event.ON_RECEIVE_TOKEN.event) {
+                if (it[1] == id) {
+                    val token = it[0].toString()
+                    this@callbackFlow.trySend(token)
+                }
+            }
+            awaitClose()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun onReceiveId(): Flow<Int> {
+        return callbackFlow {
+            com.socket.on(Event.ON_RECEIVE_ID.event) {
+                this@callbackFlow.trySend(it[0] as Int)
+            }
+            awaitClose()
+        }
+    }
+
+    fun sendToken(id: Int, token: String) {
+        com.socket.emit(Event.ON_RECEIVE_TOKEN.event, token, id)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun onNewPersonConnected(): Flow<Int> {
+        return callbackFlow {
+            com.socket.on(Event.ON_NEW_PERSON_CONNECTED.event) {
+                this@callbackFlow.trySend(it[0] as Int)
             }
             awaitClose()
         }

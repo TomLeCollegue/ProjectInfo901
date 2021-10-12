@@ -3,6 +3,7 @@ package com.entreprisecorp.projectinfo901.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -13,6 +14,8 @@ import com.entreprisecorp.projectinfo901.R
 import com.entreprisecorp.projectinfo901.databinding.FragmentHomeBinding
 import com.entreprisecorp.projectinfo901.fastitem.MessageItem
 import com.entreprisecorp.projectinfo901.fastitem.MessageSendItem
+import com.entreprisecorp.projectinfo901.setColor
+import com.entreprisecorp.projectinfo901.setDrawableEnd
 import com.entreprisecorp.projectinfo901.viewmodels.HomeFragmentViewModel
 import com.entreprisecorp.projectinfo901.viewmodels.HomeFragmentViewModelFactory
 import com.mikepenz.fastadapter.GenericItem
@@ -36,10 +39,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun refreshScreen() {
         val itemList = arrayListOf<GenericItem>()
         listMessage.forEach {
-            if(it.sender == args.userName) {
+            if (it.sender == args.userName) {
                 itemList += MessageSendItem(it.receiver ?: "tout le monde", it.text, it.isPrivate)
-            }
-            else {
+            } else {
                 itemList += MessageItem(it.sender, it.text, it.isPrivate)
             }
         }
@@ -70,6 +72,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             refreshScreen()
         }
 
+        viewModel.token.observe(viewLifecycleOwner) {
+            setButtonRequestSC()
+            binding?.apply {
+                sendPrivateButton.isEnabled = it != null
+                broadcastButton.isEnabled = it != null
+            }
+        }
+
+        viewModel.isRequestingSC.observe(viewLifecycleOwner) {
+            setButtonRequestSC()
+        }
+
+        binding?.requestScButton?.setOnClickListener {
+            if(viewModel.isRequestingSC.value == true) {
+                viewModel.releaseSC()
+            } else {
+                viewModel.requestSC()
+            }
+        }
+
+
+
         binding?.broadcastButton?.setOnClickListener {
             val textMessage = binding?.messageEditText?.text.toString()
             viewModel.broadcastMessage(
@@ -92,6 +116,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     receiver = usernameReceiver
                 )
             )
+        }
+    }
+
+    private fun setButtonRequestSC() {
+        val isRequestingSC = viewModel.isRequestingSC.value == true
+        val token = viewModel.token.value != null
+        binding?.requestScButton?.apply {
+            when {
+                isRequestingSC && token -> {
+                    setText(R.string.releaseSC)
+                    binding?.progressBar?.isVisible = false
+                    setDrawableEnd(R.drawable.ic_unlock, context)
+                    setColor(R.color.purple_200, context)
+                }
+                isRequestingSC && !token -> {
+                    setText(R.string.loadingSC)
+                    binding?.progressBar?.isVisible = true
+                    setDrawableEnd(null, context)
+                    setColor(R.color.teal_700, context)
+                }
+                !isRequestingSC -> {
+                    setText(R.string.AskSC)
+                    binding?.progressBar?.isVisible = false
+                    setDrawableEnd(R.drawable.ic_lock, context)
+                    setColor(android.R.color.holo_green_light, context)
+                }
+            }
         }
     }
 }
