@@ -86,14 +86,20 @@ class ComSocket private constructor(
      * @param message the message sent
      */
     override fun sendTo(message: Message) {
-        dataSource.sendTo(message)
+        token.value?.let {
+            dataSource.sendTo(message)
+        }
     }
 
     /**
      * Send a message to everyone on the bus
      * @param message the message sent
      */
-    override fun broadcast(message: Message) = dataSource.broadcast(message)
+    override fun broadcast(message: Message) {
+        token.value?.let {
+            dataSource.broadcast(message)
+        }
+    }
 
     /**
      * Allow you to collect the received private messages
