@@ -14,8 +14,14 @@ enum class Event(val event: String) {
     ON_NEW_PERSON_CONNECTED("onNewPersonConnected")
 }
 
+/**
+ * Subscribe and send data and the bus
+ */
 class SocketDataSource(val com: ComSocket) {
 
+    /**
+     * Emit every time we receive a broadcast message
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun onBroadcast(): Flow<Message> {
         return callbackFlow {
@@ -32,10 +38,16 @@ class SocketDataSource(val com: ComSocket) {
         }
     }
 
+    /**
+     * send a broadcast message on the bus
+     */
     fun broadcast(message: Message) {
         com.socket.emit(Event.ON_BROADCAST.event, message.text, message.clock, message.sender)
     }
 
+    /**
+     * Send a private message on the bus
+     */
     fun sendTo(message: Message) {
         com.socket.emit(
             Event.ON_RECEIVE.event,
@@ -46,6 +58,10 @@ class SocketDataSource(val com: ComSocket) {
         )
     }
 
+
+    /**
+     * Emit every time we receive a private message
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun onReceive(userName: String): Flow<Message> {
         return callbackFlow {
@@ -65,6 +81,9 @@ class SocketDataSource(val com: ComSocket) {
         }
     }
 
+    /**
+     * Emit every time we receive the SC token
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun onReceiveToken(id: Int): Flow<String> {
         return callbackFlow {
@@ -78,6 +97,11 @@ class SocketDataSource(val com: ComSocket) {
         }
     }
 
+    /**
+     * /**
+     * Emit when we receive an id from the server
+    */
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun onReceiveId(): Flow<Int> {
         return callbackFlow {
@@ -88,10 +112,16 @@ class SocketDataSource(val com: ComSocket) {
         }
     }
 
+    /**
+     * Send the token to the next node on the bus
+     */
     fun sendToken(id: Int, token: String) {
         com.socket.emit(Event.ON_RECEIVE_TOKEN.event, token, id)
     }
 
+    /**
+     * Emit every time a new person is connected
+     */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun onNewPersonConnected(): Flow<Int> {
         return callbackFlow {

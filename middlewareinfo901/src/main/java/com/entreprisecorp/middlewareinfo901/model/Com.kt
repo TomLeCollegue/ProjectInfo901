@@ -1,6 +1,5 @@
 package com.entreprisecorp.middlewareinfo901.model
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 interface Com {

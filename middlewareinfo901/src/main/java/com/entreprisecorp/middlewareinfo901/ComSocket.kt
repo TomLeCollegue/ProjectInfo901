@@ -15,6 +15,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+/**
+ * Create a connexion the bus, send private and broadcast messages with SC
+ * @param ip the ip adress on the node server
+ * @param lifecycleOwner lifecycleOwner of your app
+ * @param delaySendToken the delay awaited before sending the SC token to next node
+ * @see ComSocket.Builder
+ */
 class ComSocket private constructor(
     ip: String,
     private val lifecycleOwner: LifecycleOwner,
@@ -58,36 +65,66 @@ class ComSocket private constructor(
      * @param ipAdress the ip adress of the node server
      * @param lifecycleOwner lifecycleOwner used to listen Server and observe the datas
      * @param delaySendToken the time the system is keeping the token before sending it to the next node
+     * @see build
      */
     class Builder(
         private val ipAdress: String = "http://10.7.41.185:3000",
         private val lifecycleOwner: LifecycleOwner,
         private val delaySendToken: Int = 1000
     ) {
+
+        /**
+         * Create a ComSocket
+         */
         fun build(): ComSocket {
             return ComSocket(ipAdress, lifecycleOwner, delaySendToken)
         }
     }
 
+    /**
+     * Send a private message
+     * @param message the message sent
+     */
     override fun sendTo(message: Message) {
         dataSource.sendTo(message)
     }
 
-
+    /**
+     * Send a message to everyone on the bus
+     * @param message the message sent
+     */
     override fun broadcast(message: Message) = dataSource.broadcast(message)
 
+    /**
+     * Allow you to collect the received private messages
+     * @param userName your username for filtering the private messages
+     */
     override fun onReceive(userName: String): Flow<Message> = dataSource.onReceive(userName)
 
+    /**
+     * Allow you to collect the received broadcast messages
+     */
     override fun onBroadcast(): Flow<Message> = dataSource.onBroadcast()
 
+    /**
+     * Request the critical section
+     */
     override fun requestSC() = _isRequestingSC.postValue(true)
 
+    /**
+     * Release the critical section
+     */
     override fun releaseSC() = _isRequestingSC.postValue(false)
 
     override fun synchronize() {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Manage the critical section token
+     * send the token is critical section released,
+     * send the token to the next if we dont request the SC
+     */
     override fun manageReceiveToken() {
         isRequestingSC.observe(lifecycleOwner) {
             if (!it) {
@@ -110,6 +147,9 @@ class ComSocket private constructor(
 
     }
 
+    /**
+     * Send the token to the next with delay to avoid error on demo
+     */
     private fun sendTokenWithDelay() {
         Handler(Looper.getMainLooper()).postDelayed(
             {
@@ -119,6 +159,9 @@ class ComSocket private constructor(
         )
     }
 
+    /**
+     * Send the token to the next node on the bus
+     */
     private fun sendTokenToNext() {
         token.value?.let { token ->
             if (id == userCount - 1) {
@@ -133,7 +176,9 @@ class ComSocket private constructor(
         }
     }
 
-    // Get our Id from the server
+    /**
+     * Update the id coming from the server
+     */
     private fun onReceiveId() {
         lifecycleOwner.lifecycleScope.launch {
             dataSource.onReceiveId().collect {
@@ -150,11 +195,16 @@ class ComSocket private constructor(
         }
     }
 
+    /**
+     * Create new token for SC if we are the first node on the bus
+     */
     private fun createNewToken() {
         _token.postValue("testSocket")
     }
 
-    // Detect if a new person is connected and update the count of connected users
+    /**
+     * Allow you to collect if new persons are connected on the bus and update the userCount
+     */
     private fun onNewPersonConnected() {
         lifecycleOwner.lifecycleScope.launch {
             dataSource.onNewPersonConnected().collect {

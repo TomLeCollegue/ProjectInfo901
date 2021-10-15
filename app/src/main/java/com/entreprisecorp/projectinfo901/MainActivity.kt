@@ -14,6 +14,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        middleware = ComSocket.Builder("http://10.7.151.185:3000", this).build()
+        middleware = ComSocket.Builder("http://172.20.10.2:3000", this).build()
     }
 }
