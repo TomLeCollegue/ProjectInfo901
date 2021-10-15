@@ -9,7 +9,7 @@ Il y a aussi un système de section critique avec un jeton envoyé en anneau. En
 
 Nous avons réalisé une petite vidéo afin pour que vous puissiez observer facilement cette application.
 
---- lien de la vidéo ---
+[Lien youtube vers une démo de l'application](https://www.youtube.com/watch?v=IV7eBbZWWCY)
 
 Afin de simuler le système de bus, nous avons réalisé un serveur node avec les websockets.
 
