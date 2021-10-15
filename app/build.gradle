@@ -13,21 +13,13 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.entreprisecorp.hereisabench"
+        applicationId "com.entreprisecorp.projetinfo901"
         minSdkVersion 26
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -52,21 +44,18 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:_"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:_"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:_"
 
     implementation "androidx.navigation:navigation-fragment-ktx:_"
     implementation "androidx.navigation:navigation-ui-ktx:_"
 
     implementation "com.google.android.material:material:_"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:_'
 
     //Fast adapter
     implementation "com.mikepenz:fastadapter:_"
     implementation "com.mikepenz:fastadapter-extensions-binding:_"
     implementation "com.mikepenz:fastadapter-extensions-utils:_"
-    implementation(project(":middlewareinfo901"))
 
-    // Testing
-    testImplementation "junit:junit:_"
-    androidTestImplementation "androidx.test.espresso:espresso-core:_"
+    implementation(project(":middlewareinfo901"))
 }
